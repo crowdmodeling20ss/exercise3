@@ -5,12 +5,13 @@ from numpy import linalg as LA
 def phasePortrait(alpha):
 	x = np.arange(-1, 1.1, 0.1)
 	x1, x2 = np.meshgrid(x, x)
+	print(x1)
 	Ax_1 = alpha * x1 + alpha * x2
 	Ax_2 = (-1/4) * x1
 
 	fig = plt.figure()
 	ax0 = fig.add_subplot()
-	ax0.streamplot(x1, x2, Ax_1, Ax_2, color='r', linewidth=2)
+	ax0.streamplot(x1, x2, Ax_1, Ax_2, color='r', linewidth=1)
 	ax0.set_title("Apha = {}".format(alpha))
 	plt.show()
 
@@ -20,7 +21,14 @@ def findEigenvalues(alpha):
 	return values
 
 def main():
-	alpha = -0.3
+	# Just to see if we have any eigenvalues which are both negative (We don't)
+	alphas = np.arange(-10,10,0.00001)
+	for alp in alphas:
+		eigvalues = findEigenvalues(alp)
+		if eigvalues[0] and eigvalues[1] < 0:
+			print(eigvalues)
+
+	alpha = 5
 	phasePortrait(alpha)
 	eigvalues = findEigenvalues(alpha)
 	print(eigvalues)
@@ -50,4 +58,7 @@ if __name__ == '__main__':
 	- Nodes and foci(of corresponding stability) are topologically equivalent but can be identified looking at the eigenvalues.
 
 	Therefore; 1 and 2 are topologically equivalent since they have the same stability and hence same number n− and n+ of eigenvalues which is n+ in this case.
+
+	stable = attracting point, convergence
+	unstable = repelling point, divergence
 '''
