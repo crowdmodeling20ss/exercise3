@@ -3,26 +3,25 @@ import numpy as np
 from scipy.integrate import solve_ivp
 
 
-def draw_phase_portrait():
-    x = np.arange(-1, 1.1, 0.1)
+def draw_phase_portrait(alpha):
+    x = np.arange(-2, 2.01, 0.01)
     x1, x2 = np.meshgrid(x, x)
+    y1 = alpha * x1 - x2 - x1 * (x1 ** 2 + x2 ** 2)
+    y2 = x1 + alpha * x2 - x2 * (x1 ** 2 + x2 ** 2)
 
-    alphas = [-1, 0, 1]
     fig = plt.figure()
-    fig.subplots_adjust(hspace=0.4, wspace=0.4)
-    for index, alpha in enumerate(alphas, start=1):
-        y1 = alpha * x1 - x2 - x1 * (x1 ** 2 + x2 ** 2)
-        y2 = x1 - alpha * x2 - x2 * (x1 ** 2 + x2 ** 2)
-        ax0 = fig.add_subplot(1, len(alphas), index)
-        ax0.streamplot(x1, x2, y1, y2, color='r', linewidth=1)
-        ax0.set_title("alpha = {}".format(alpha))
+    ax0 = fig.add_subplot()
+    ax0.streamplot(x1, x2, y1, y2, color='r', linewidth=1)
+    ax0.set_title("alpha = {}".format(alpha))
 
+    plt.xlabel("x1")
+    plt.ylabel("x2")
     plt.show()
 
 
 def calculate_next_state(t, x):
     v = [(x[0] - x[1] - x[0] * (x[0] ** 2 + x[1] ** 2)),
-         (x[0] - x[1] - x[1] * (x[0] ** 2 + x[1] ** 2))]
+         (x[0] + x[1] - x[1] * (x[0] ** 2 + x[1] ** 2))]
 
     x_new = [t * v[0] + x[0], t * v[1] + x[1]]
 
@@ -48,23 +47,32 @@ def plot_by_svd_solver(x, end_time):
 
 
 def main():
+    alphas = [-1,0,1]
+    for alpha in alphas:
+        draw_phase_portrait(alpha)
+
     fig = plt.figure()
-    fig.subplots_adjust(hspace=0.4, wspace=0.4)
     end_time = 400
 
     initial_points = [[2, 0], [0.5, 0]]
     for index, x in enumerate(initial_points):
         euler_sol = plot_by_euler_method(x, end_time)
-        ax0 = fig.add_subplot(2, 2, index * 2 + 1)
-        ax0.scatter(euler_sol[0], euler_sol[1])
-        ax0.set_title("Euler Point: {}".format(initial_points[index]))
+        plt.scatter(euler_sol[0], euler_sol[1],linewidth=1,s=1)
+        plt.scatter(euler_sol[0][0], euler_sol[1][0],color ="k",s=10)
+        plt.scatter(euler_sol[0][-1], euler_sol[1][-1],color ="r",s=10)
+        plt.title("Euler's Method: {}".format(initial_points[index]))
+        plt.xlabel("x1")
+        plt.ylabel("x2")
+        plt.show()
 
         svd_sol = plot_by_svd_solver(x, end_time)
-        ax0 = fig.add_subplot(2, 2, index * 2 + 2)
-        ax0.scatter(svd_sol[0], svd_sol[1])
-        ax0.set_title("SVD Point: {}".format(initial_points[index]))
-
-    plt.show()
+        plt.scatter(svd_sol[0], svd_sol[1],s=1)
+        plt.scatter(svd_sol[0][0], svd_sol[1][0],color ="k",s=10)
+        plt.scatter(svd_sol[0][-1], svd_sol[1][-1],color ="r",s=10)
+        plt.title("SVD Method: {}".format(initial_points[index]))
+        plt.xlabel("x1")
+        plt.ylabel("x2")
+        plt.show()
 
 
 if __name__ == '__main__':
