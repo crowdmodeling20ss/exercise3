@@ -1,18 +1,22 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import solve_ivp
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import numpy as np
+from scipy.optimize import fsolve
 
 
 def draw_phase_portrait():
-    x = np.arange(-1, 1.1, 0.1)
+    x = np.arange(-2, 2.1, 0.1)
     x1, x2 = np.meshgrid(x, x)
 
-    alphas = [-1, 0, 1]
+    alphas = [-1.8, 0, 1.3]
     fig = plt.figure()
     fig.subplots_adjust(hspace=0.4, wspace=0.4)
     for index, alpha in enumerate(alphas, start=1):
         y1 = alpha * x1 - x2 - x1 * (x1 ** 2 + x2 ** 2)
-        y2 = x1 - alpha * x2 - x2 * (x1 ** 2 + x2 ** 2)
+        y2 = x1 + alpha * x2 - x2 * (x1 ** 2 + x2 ** 2)
         ax0 = fig.add_subplot(1, len(alphas), index)
         ax0.streamplot(x1, x2, y1, y2, color='r', linewidth=1)
         ax0.set_title("alpha = {}".format(alpha))
