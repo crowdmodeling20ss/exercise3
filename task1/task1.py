@@ -11,7 +11,7 @@ def phasePortrait(alpha):
 
 	fig = plt.figure()
 	ax0 = fig.add_subplot()
-	ax0.streamplot(x1, x2, Ax_1, Ax_2, color='r', linewidth=1)
+	ax0.streamplot(x1, x2, Ax_1, Ax_2, color='r', linewidth=1, )
 	ax0.set_title("Apha = {}".format(alpha))
 	plt.show()
 
@@ -22,13 +22,15 @@ def findEigenvalues(alpha):
 
 def main():
 	# Just to see if we have any eigenvalues which are both negative (We don't)
+	'''
 	alphas = np.arange(-10,10,0.00001)
 	for alp in alphas:
 		eigvalues = findEigenvalues(alp)
 		if eigvalues[0] and eigvalues[1] < 0:
 			print(eigvalues)
+	'''
 
-	alpha = 5
+	alpha = 0
 	phasePortrait(alpha)
 	eigvalues = findEigenvalues(alpha)
 	print(eigvalues)

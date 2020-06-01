@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import numpy as np
 from scipy.integrate import solve_ivp
 
@@ -46,7 +47,36 @@ def plot_by_svd_solver(x, end_time):
     return sol.y
 
 
+def cuspFunction(x,alpha1,alpha2):
+    return alpha1 + alpha2*x - x**3
+
+
+def cuspBifurcation():
+    fig = plt.figure(figsize=(20,10))
+    ax0 = fig.gca(projection='3d')
+    alpha = np.arange(-1, 1.01, 0.01)
+    x_values = np.arange(-1, 1.01, 0.01)
+    alpha1, alpha2 = np.meshgrid(alpha, alpha)
+
+
+    for z in x_values:
+        X,Y = alpha1,alpha2
+        Z = cuspFunction(z,X,Y)
+        cset = ax0.contour(X, Y, Z+z, [z], zdir='z', colors = "brown", antialiased=True, linestyles='dotted')
+
+
+    plt.xlabel("alpha1")
+    plt.ylabel("alpha2")
+    plt.title("Cusp Bifurcation")
+    plt.show()
+
+
+
+
 def main():
+
+    cuspBifurcation()
+    
     alphas = [-1,0,1]
     for alpha in alphas:
         draw_phase_portrait(alpha)

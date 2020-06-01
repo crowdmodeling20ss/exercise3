@@ -14,7 +14,6 @@ def findSteadyState(system_number, alpha):
 
 
 def getPoints(system_number, alphas):
-	# TODO: find which one is stable which is unstable
 	x_values_first = []  
 	x_values_second = []
 	for a in alphas:
@@ -26,8 +25,11 @@ def getPoints(system_number, alphas):
 	return x_values_first, x_values_second
 
 def drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size):
-	alphas = np.arange(alpha_min, alpha_max, alpha_step_size)  # when you increase, bifurcation point does not appear on the plot
+	alphas = np.linspace(alpha_min, alpha_max, alpha_step_size,dtype=np.float128)  # when you increase, bifurcation point does not appear on the plot
 	# taking alpha values that makes steady point positive (inside square root)
+	print(alphas[1000])
+	print(alphas[1001])
+	print(alphas[1002])
 	if system_number == 6:
 		alpha_positives = alphas[alphas >= 0]  # probably due to numerical issues, 0 is not present in this array
 	elif system_number == 7:
@@ -35,11 +37,11 @@ def drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size)
 
 	x0_1, x0_2 = getPoints(system_number, alpha_positives) # sending only alphas that satisfy creation of steady points
 
-	# TODO: make plots better, fix alpha range
+	# TODO: make plots better, fix alpha range, show half-stable point
 
 	if x0_1 != [] and x0_2 != []:
-		plt.plot(alpha_positives, x0_1, color = 'k')
-		plt.plot(alpha_positives, x0_2, color = 'k')
+		plt.plot(alpha_positives, x0_1, color = 'k')    # stables
+		plt.plot(alpha_positives, x0_2, color = 'k', linestyle=':')	# unstables
 
 	plt.xlabel("alpha")
 	plt.ylabel("x")
@@ -48,10 +50,10 @@ def drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size)
 
 
 def main():
-	alpha_min = -4
-	alpha_max = 4.004
-	alpha_step_size = 0.004
-	system_number = 7
+	alpha_min = -1
+	alpha_max = 1
+	alpha_step_size = 2001
+	system_number = 6
 	drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size) # 6 for system 6, 7 for system 7
 	
 
