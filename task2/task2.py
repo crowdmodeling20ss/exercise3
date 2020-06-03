@@ -3,6 +3,13 @@ import numpy as np
 
 
 def findSteadyState(system_number, alpha):
+    """
+    Finds the steady points of specified system
+
+    :param system_number: System to be solved, number as given in the exercise sheet.
+    :param alpha: Parameter alpha of given system.
+    :return: Steady states of the system.
+    """
     if system_number == 6:
         steady_states = [np.sqrt(alpha), - np.sqrt(alpha)]
     elif system_number == 7:
@@ -14,6 +21,13 @@ def findSteadyState(system_number, alpha):
 
 
 def getPoints(system_number, alphas):
+    """
+    Finds steady states of the specified system for all alpha values given.
+
+    :param system_number: System to be solved, number as given in the exercise sheet.
+    :param alphas: Alpha range to solve the system for each.
+    :return: Steady states for all alpha values.
+    """
     x_values_first = []
     x_values_second = []
     for a in alphas:
@@ -26,12 +40,18 @@ def getPoints(system_number, alphas):
 
 
 def drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size):
+    """
+    Draws bifurcation diagram of given system
+
+    :param system_number: System to be solved, number as given in the exercise sheet.
+    :param alpha_min: Minimum alpha value to solve the system.
+    :param alpha_max: Maximum alpha value to solve the system.
+    :param alpha_step_size: Number of alphas we want to create the alpha range.
+    """
     alphas = np.linspace(alpha_min, alpha_max, alpha_step_size,
                          dtype=np.float128)  # when you increase, bifurcation point does not appear on the plot
     # taking alpha values that makes steady point positive (inside square root)
-    print(alphas[1000])
-    print(alphas[1001])
-    print(alphas[1002])
+
     if system_number == 6:
         alpha_positives = alphas[alphas >= 0]  # probably due to numerical issues, 0 is not present in this array
     elif system_number == 7:
@@ -39,7 +59,6 @@ def drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size)
 
     x0_1, x0_2 = getPoints(system_number, alpha_positives)  # sending only alphas that satisfy creation of steady points
 
-    # TODO: make plots better, fix alpha range, show half-stable point
 
     if x0_1 != [] and x0_2 != []:
         plt.plot(alpha_positives, x0_1, color='k', label='Stable')  # stables
@@ -53,6 +72,9 @@ def drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size)
 
 
 def draw_sys_6_phase_portrait():
+    """
+    Draws phase portraits of System 6.
+    """
     fig = plt.figure(figsize=(9, 3))
     x = np.arange(-2, 2.01, 0.01)
 
@@ -119,6 +141,9 @@ def draw_sys_6_phase_portrait():
     plt.show()
 
 def draw_sys_7_phase_portrait():
+    """
+    Draws phase portraits of System 7.
+    """
     fig = plt.figure(figsize=(9, 3))
     x = np.arange(-10, 10.01, 0.01)
 
@@ -188,97 +213,20 @@ def draw_sys_7_phase_portrait():
 
     plt.show()
 
-"""
-def draw_sys_7_phase_portrait(alpha):
-    x = np.arange(-2, 2.01, 0.01)
-    y = alpha - 2 * (x ** 2) - 3
-
-    fig = plt.figure()
-    ax = fig.add_subplot()
-    ax.plot(x, y, color='r', linewidth=2)
-    plt.plot([0], [0], 'bo', color="white", lw=1, label="weakly stable")
-    ax.set_title("alpha = {}".format(alpha))
-
-    plt.xlabel("x")
-    plt.ylabel("y")
-
-    ax.spines['left'].set_position('zero')
-    ax.spines['right'].set_color('none')
-    ax.spines['bottom'].set_position('zero')
-    ax.spines['top'].set_color('none')
-    ax.xaxis.set_ticks_position('bottom')
-    ax.yaxis.set_ticks_position('left')
-
-    ax.annotate('', xy=(0.5, 0), xytext=(1.5, 0), arrowprops=dict(arrowstyle="->", connectionstyle="arc3", lw=2), )
-
-    plt.show()
-"""
 
 def main():
     # Usages
-    """
-    #
-    #draw_sys_6_phase_portrait()
-    """
-
+    
+    draw_sys_6_phase_portrait()
     draw_sys_7_phase_portrait()
 
-
-    """
     alpha_min = -1
     alpha_max = 1
     alpha_step_size = 2001
     system_number = 6
     drawBifurcationDiagram(system_number, alpha_min, alpha_max, alpha_step_size)  # 6 for system 6, 7 for system 7
-    """
+    
 
 
 if __name__ == '__main__':
     main()
-
-'''
-     **** We can use solver to show the attracted and repelled points
-
-def system6(t,x,alpha):
-	return alpha - x**2
-
-def system7(t,x,alpha):
-	return alpha - 2*(x**2) - 3
-
-
-
-def findStability(num,alpha):
-	
-	steady_states = findSteadyState()
-	
-
-	print("steady_states: ", steady_states)
-	real_steady_states = steady_states.real
-	print("real_steady_states: ", real_steady_states)
-
-	num_positive = 0
-	num_negative = 0
-	for value in real_steady_states:
-		if value > 0:
-			num_positive += 1
-		else:
-			num_negative += 1
-
-	if num_negative == num_positive:
-		return 0 # saddle point
-	elif num_negative > num_positive:
-		return 1 # stable point
-	else:
-		return -1 # unstable point
-
-alphas = np.arange(-1,1.0001,0.0001)
-empty_alphas = np.zeros(len(alphas))
-
-for a in alphas:
-	#time = (0.0, 1000.0)
-	#x_init = np.arange(-1, 1.1, 0.1)
-	#x_init = -1
-	#x_init = [np.random.random()]
-
-	#sol = solve_ivp(system6, time, x_init, args=(a,))
-'''
